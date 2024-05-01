@@ -1,0 +1,353 @@
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <link href="base.css" type="text/css" rel="stylesheet"/>
+        <script src="jquery.js" type="text/javascript"></script>
+
+	    <script type="text/javascript">
+	
+	        $(function()
+	        {
+	            // Request controller settings
+                $.get("controller_settings", function(data)
+                {
+					data = JSON.parse(data);
+					
+					$('#thermocouple_type').html(data['thermocouple_type']);
+					$('#err_1_enable').html(data['err_1_enable']);
+					$('#max_temperature').html(data['max_temperature']);
+					$('#display_brightness').html(data['display_brightness']);
+					$('#err_4_enable').html(data['err_4_enable']);
+					$('#err_5_enable').html(data['err_5_enable']);
+					$('#max_hours').html(data['max_hours']);
+					$('#max_ambient').html(data['max_ambient']);
+					$('#power_fail_enable').html(data['power_fail_enable']);
+					$('#paused_hours_limit').html(data['paused_hours_limit']);
+					$('#set_point_offset').html(data['set_point_offset']);
+					$('#proportional_band').html(data['proportional_band']);
+					$('#integral_time').html(data['integral_time']);
+					$('#differential_time').html(data['differential_time']);
+					$('#element_power').html(data['element_power']);
+					$('#lockup_enabled').html(data['lockup_enabled']);
+					$('#control_cycle_time').html(data['control_cycle_time']);
+					$('#relay_3_function').html(data['relay_3_function']);
+					$('#remember_start_delay').html(data['remember_start_delay']);
+					$('#skip_start_delay').html(data['skip_start_delay']);
+					$('#sampling_rate').html(data['sampling_rate']);
+					$('#temperature_units').html(data['temperature_units']);
+					$('#max_programs').html(data['max_programs']);
+					$('#max_segments').html(data['max_segments']);
+
+					$('#main_firmware_version').html(data['main_firmware_version']);
+					$('#daughter_board_firmware_version').html(data['daughter_board_firmware_version']);
+					$('#comms_firmware_version').html(data['comms_firmware_version']);
+					
+		            // Request status information
+					updateStatus();
+                });
+	        });
+			
+			// Requests status information via Ajax
+			function updateStatus()
+			{
+	            // Request diagnostic information
+                $.get("controller_status", function(data)
+                {
+					data = JSON.parse(data);
+					
+					$('#date_time').html(data['date_time']);
+					$('#firing_state').html(data['firing_state']);
+					$('#ambient').html(data['ambient']);
+					$('#temperature').html(data['temperature']);
+					$('#temperature_set_point').html(data['temperature_set_point']);
+					$('#total_duty').html(data['total_duty']);
+					$('#prop_duty').html(data['prop_duty']);
+					$('#int_duty').html(data['int_duty']);
+					$('#deriv_duty').html(data['deriv_duty']);
+					$('#energy').html(data['energy']);
+					$('#program').html(data['program']);
+					$('#segment').html(data['segment']);
+					$('#start_delay').html(data['start_delay']);
+					$('#start_delay_remaining').html(data['start_delay_remaining']);
+					
+					if (data['firing_state'] == 'Access-point mode')
+					{
+						$('#notification_message').show();
+					}
+					else
+					{
+						$('#notification_message').hide();
+					}					
+					
+					setTimeout(updateStatus, 2000);
+                });
+			}
+		</script>        
+
+        <title>Temperature Controller</title>
+    </head>
+
+    <body>
+		<header>
+			<div id="header_inner">
+				<a id="header_logo" href="home">Temperature Controller</a>
+			
+				<div id="navigation_bar">
+					<nav>
+						<ul id="nav_menu_main">
+							<li><a id="home_item" href="home">Wi-Fi connection</a></li>
+							<li><a id="diagnostics_item" class="selected_menu_item" href="diagnostics">Diagnostics</a></li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</header>
+
+		<div id="page_content">
+		
+			<!-- Title bar -->
+			<div id="title_bar">
+				<h1>Diagnostics</h1>
+			</div>
+
+			<form id="diagnostics_form" action="" method="post">
+
+				<div class="form_section">
+
+                    <h2>General status</h2>
+
+                    <table class="diagnostics_table" id="status_table">
+                        <tr>
+                            <th>RTC date/time</th>
+                            <td id="date_time"></td>
+                        </tr>
+                        <tr>
+                            <th>Firing state</th>
+                            <td id="firing_state"></td>
+                        </tr>
+                        <tr>
+                            <th>Ambient temperature</th>
+                            <td id="ambient"></td>
+                        </tr>
+                        <tr>
+                            <th>Measured temperature</th>
+                            <td id="temperature"></td>
+                        </tr>
+                        <tr>
+                            <th>Temperature set-point</th>
+                            <td id="temperature_set_point"></td>
+                        </tr>
+                        <tr>
+                            <th>Program number</th>
+                            <td id="program"></td>
+                        </tr>
+                        <tr>
+                            <th>Segment number</th>
+                            <td id="segment"></td>
+                        </tr>
+                        <tr>
+                            <th>Start delay</th>
+                            <td id="start_delay"></td>
+                        </tr>
+                        <tr>
+                            <th>Delay remaining</th>
+                            <td id="start_delay_remaining"></td>
+                        </tr>
+                        <tr>
+                            <th>Total energy used</th>
+                            <td id="energy"></td>
+                        </tr>
+                    </table>
+
+				</div>
+
+				<div class="form_section">
+
+                    <h2>PID controller status</h2>
+
+                    <table class="diagnostics_table" id="status_table">
+                        <tr>
+                            <th>Current total energy</th>
+                            <td id="total_duty"></td>
+                        </tr>
+                        <tr>
+                            <th>Current proportional energy</th>
+                            <td id="prop_duty"></td>
+                        </tr>
+                        <tr>
+                            <th>Current integral energy</th>
+                            <td id="int_duty"></td>
+                        </tr>
+                        <tr>
+                            <th>Current derivative energy</th>
+                            <td id="deriv_duty"></td>
+                        </tr>
+                    </table>
+
+				</div>
+
+				<div id="notification_message" class="form_section">
+                    <p>If you want to monitor the status while the controller is running a program you can
+                        <input class="button_as_link" type="submit" name="release" value="release the controller from access-point mode"/></p>
+				</div>
+
+				<div class="form_section">
+
+                    <h2>Configuration settings</h2>
+
+                    <table class="diagnostics_table" id="configuration_table">
+                        <tr>
+                            <th>#0 Thermocouple type</th>
+                            <td id="thermocouple_type"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#1 Error 1 enable</th>
+                            <td id="err_1_enable"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#2 Max user temperature</th>
+                            <td id="max_temperature"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#3 Display brightness</th>
+                            <td id="display_brightness"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#4 Error 4 enable</th>
+                            <td id="err_4_enable"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#5 Error 5 enable</th>
+                            <td id="err_5_enable"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#6 Error 6 firing hours trip</th>
+                            <td id="max_hours"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#7 Room temperature trip</th>
+                            <td id="max_ambient"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#8 Power fail recovery enable</th>
+                            <td id="power_fail_enable"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#9 Paused time limit</th>
+                            <td id="paused_hours_limit"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#10 Set point offset</th>
+                            <td id="set_point_offset"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#11 Proportional band</th>
+                            <td id="proportional_band"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#12 Integral time</th>
+                            <td id="integral_time"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#13 Differential time</th>
+                            <td id="differential_time"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#14 Element power</th>
+                            <td id="element_power"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#43 Engineer lockup on error</th>
+                            <td id="lockup_enabled"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#44 Control cycle time</th>
+                            <td id="control_cycle_time"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#45 Relay 3 function</th>
+                            <td id="relay_3_function"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#46 Remember start delay</th>
+                            <td id="remember_start_delay"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#47 Skip start delay after power failure</th>
+                            <td id="skip_start_delay"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#50 USB logging interval</th>
+                            <td id="sampling_rate"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#60 Operating units</th>
+                            <td id="temperature_units"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#61 Maximum programs</th>
+                            <td id="max_programs"></td>
+                        </tr>
+
+                        <tr>
+                            <th>#62 Maximum segments </th>
+                            <td id="max_segments"></td>
+                        </tr>
+
+                    </table>
+
+				</div>
+				
+				<div class="form_section">
+
+                    <h2>Firmware versions</h2>
+
+                    <table class="diagnostics_table" id="firmware_table">
+                        <tr>
+                            <th>Main board firmware</th>
+                            <td id="main_firmware_version"></td>
+                        </tr>
+
+                        <tr>
+                            <th>Daughter board firmware</th>
+                            <td id="daughter_board_firmware_version"></td>
+                        </tr>
+
+                        <tr>
+                            <th>Comms firmware</th>
+                            <td id="comms_firmware_version"></td>
+                        </tr>
+
+                    </table>
+
+				</div>
+				
+			</form>
+			
+		</div>
+    </body>
+</html>

@@ -1,0 +1,80 @@
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <link href="base.css" type="text/css" rel="stylesheet"/>
+
+        <script src="jquery.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+    
+            $(function()
+            {
+                if ({{ password_required }})
+                {
+                    $('#password_section').show();
+                    
+                    $('#connect_button').prop('disabled', true);
+                    $('#password').change(function()
+                    {
+                        $('#connect_button').prop('disabled', false);
+                    });             
+                    
+                }
+                else
+                {
+                    $('#password_section').hide();
+                }
+            });
+        </script>        
+
+        <title>Temperature Controller</title>
+    </head>
+
+    <body>
+        <header>
+            <div id="header_inner">
+                <a id="header_logo" href="home">Temperature Controller</a>
+            
+                <div id="navigation_bar">
+                    <nav>
+                        <ul id="nav_menu_main">
+                            <li><a id="home_item" class="selected_menu_item" href="home">Wi-Fi connection</a></li>
+                            <li><a id="diagnostics_item" href="diagnostics">Diagnostics</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <div id="page_content">
+        
+            <div id="thumbnail">
+                <a href="home">< Back</a>
+            </div>
+
+            <!-- Title bar -->
+            <div id="title_bar">
+                <h1>Connect to {{ ssid }}</h1>
+            </div>
+
+            <form id="connection_form" action="" method="post">
+
+                <div id="password_section" class="form_section">
+
+                    <div class="form_field">
+                        <label for="password">Enter password:</label>
+                        <input id="password" type="password" name="password" value=""/>
+                    </div>
+                </div>
+                
+                <input id="ssid" type="hidden" name="ssid" value="{{ ssid }}"/>
+                
+                <input id="connect_button" type="submit" name="connect" value="Connect"/>
+
+            </form>
+            
+        </div>
+    </body>
+</html>

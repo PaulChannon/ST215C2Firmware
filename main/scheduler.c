@@ -69,21 +69,18 @@ void initialise_scheduler()
 */
 static void scheduler_task(void *parameters)
 {
-	int32_t firing_state;
+	int32_t firing_state = FIRING_STATE_INITIALISING;
 	int32_t update_start_tick = 0;
 	int32_t ticks_until_post;
 	int32_t next_post_delay = 0;
 
 	// Wait for the controller to boot up by attempting to read the firing mode
-	while (!read_firing_state(&firing_state) || firing_state == FIRING_STATE_INITIALISING)
+	while (firing_state == FIRING_STATE_INITIALISING)
 	{
 		vTaskDelay(100 / portTICK_PERIOD_MS);
 	}
 
 	DEBUG_INFO("Initial firing state: %ld", firing_state);
-
-	// Send the MAC address to the controller
-	write_mac_address(_controller.mac_address);
 
 	// See if the user has issued a special instruction
 	if (firing_state == FIRING_STATE_PAIRING)
@@ -97,10 +94,7 @@ static void scheduler_task(void *parameters)
 		pair_with_router();
 
 		// Regardless of the outcome, reset the controller to clear pairing mode
-		while (!reset_controller())
-		{
-			vTaskDelay(10 / portTICK_PERIOD_MS);
-		}
+		reset_controller();
 	}
 	else if (firing_state == FIRING_STATE_AP)
 	{

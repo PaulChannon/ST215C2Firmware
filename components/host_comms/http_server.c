@@ -8,7 +8,6 @@
 #include "freertos/queue.h"
 #include "common.h"
 #include "controller.h"
-#include "wifi_interface.h"
 #include "context_dictionary.h"
 #include "template_renderer.h"
 #include "http_utils.h"

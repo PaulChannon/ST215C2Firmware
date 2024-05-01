@@ -1,0 +1,119 @@
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <link href="base.css" type="text/css" rel="stylesheet"/>
+
+        <script src="jquery.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+        
+            var _retries = 0;
+    
+            $(function()
+            {
+                // Show the appropriate sections
+                $('#result_success').hide();
+                $('#result_failure').hide();
+                $('#ok_button').prop('disabled', true);
+                
+                // Request connection status
+                checkConnectionStatus();
+            });
+            
+            // Checks the status of the connection to the router
+            function checkConnectionStatus()
+            {
+                $.get("connection_status", function(data)
+                {
+                    data = JSON.parse(data);
+                    
+                    if (data.hasOwnProperty('router_connected') && data['router_connected'])
+                    {
+                        $('#result_success').show();
+                        $('#connecting_message').hide();
+                        $('.spinner').hide();
+                        $('#ok_button').prop('disabled', false);
+                    }
+                    else if (data.hasOwnProperty('router_connection_error') && data['router_connection_error'])
+                    {
+                        $('#result_failure').show();
+                        $('#connecting_message').hide();
+                        $('.spinner').hide();
+                        $('#ok_button').prop('disabled', false);
+                    }
+                    else
+                    {
+                        _retries++;
+                        if (_retries >= 30)
+                        {
+                            $('#result_failure').show();
+                            $('#connecting_message').hide();
+                            $('.spinner').hide();
+                            $('#ok_button').prop('disabled', false);
+                        }
+                        else
+                        {
+                            setTimeout(checkConnectionStatus, 1000);
+                        }
+                    }
+                });
+            }           
+            
+        </script>        
+
+        <title>Temperature Controller</title>
+    </head>
+
+    <body>
+        <header>
+            <div id="header_inner">
+                <a id="header_logo" href="home">Temperature Controller</a>
+            
+                <div id="navigation_bar">
+                    <nav>
+                        <ul id="nav_menu_main">
+                            <li><a id="home_item" class="selected_menu_item" href="home">Wi-Fi connection</a></li>
+                            <li><a id="diagnostics_item" href="diagnostics">Diagnostics</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <div id="page_content">
+        
+            <!-- Title bar -->
+            <div id="title_bar">
+                <h1>Wi-Fi network connection</h1>
+            </div>
+
+            <form id="connect_result_form" action="" method="post">
+
+                <div id="connecting_section" class="form_section">
+
+                    <div id="connecting_message">
+                        <span>Connecting to <strong>{{ ssid }}</strong></span>
+                        <div class="spinner"></div>             
+                    </div>
+
+                    <div id="result_failure">
+                        <p>Failed to connect to Wi-Fi network <strong>{{ ssid }}</strong>.</p>
+                        <p>Please check your password and SSID if you entered one and then try again.</p>
+                    </div>
+                    <div id="result_success">
+                        <p>Your controller has successfully connected to Wi-Fi network <strong>{{ ssid }}</strong>.</p>
+                        <p>To take the controller out of Access Point mode, please turn the power off and then on again. The controller should then start communicating with our server, providing your Wi-Fi network has an internet connection.</p>
+                    </div>
+                </div>
+
+                <input id="ssid" type="hidden" name="ssid" value="{{ ssid }}"/>
+
+                <input id="ok_button" type="submit" name="ok" value="Ok"/>
+                
+            </form>
+            
+        </div>
+    </body>
+</html>

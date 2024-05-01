@@ -23,7 +23,8 @@
     "freertosconfig.h": "c",
     "common.h": "c",
     "bsp_errors.h": "c",
-    "esp_wifi.h": "c"
+    "esp_wifi.h": "c",
+    "event_groups.h": "c"
   },
   "cmake.configureOnOpen": true
 }

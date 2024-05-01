@@ -30,7 +30,6 @@ static const char *MODULE_NAME = "Main";
 static bool _controller_ready = false;
 
 static void scheduler_task(void *parameters);
-static void power_down_handler();
 static void timer_handler();
 
 /**
@@ -41,7 +40,7 @@ void app_main()
 	_TBspError status;
 
 	// Initialise the board support package
-	status = initialise_bsp(timer_handler, power_down_handler);
+	status = initialise_bsp(timer_handler);
 	if (status != BSP_OK)
 	{
 		DEBUG_ERROR("Failed to initialise BSP");
@@ -66,13 +65,6 @@ static void scheduler_task(void *parameters)
 {
 	bool rtc_configured;
 
-	// Configure the display
-    configure_display();
-
-	// Calibrate the ADC
-  	calibrate_adc();
-	delay_ms(100);
-
 	// Configure the RTC chip if required. This should only happen once after board manufacture
 	if (check_rtc_configured(&rtc_configured) == BSP_OK)
 	{
@@ -86,12 +78,8 @@ static void scheduler_task(void *parameters)
 		}
 	}
 
-	// Clear the displays and LEDs
-    clear_all_displays();
-
 	// Call the controller task and stay there
 	_controller_ready = true;
-	controller_task();
 }
 
 /**
@@ -101,16 +89,7 @@ static void timer_handler()
 {
 	if (!_controller_ready) return;
 
-	int64_t time_since_boot = esp_timer_get_time();
-	controller_timer_handler(time_since_boot);
+//	int64_t time_since_boot = esp_timer_get_time();
+//	controller_timer_handler(time_since_boot);
 }
 
-/**
- * @brief Called when the controller is about to power down
- */
-static void power_down_handler()
-{
-	if (!_controller_ready) return;
-
-	controller_power_down_handler();
-}

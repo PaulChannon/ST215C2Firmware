@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <link href="base.css" type="text/css" rel="stylesheet"/>
+        <script src="jquery.js" type="text/javascript"></script>
+
+        <script type="text/javascript">
+    
+            $(function()
+            {
+                // Show the appropriate sections
+                if ({{ router_known }})
+                {
+                    $('#not_connected_section').hide();
+                    if ({{ router_connected }})
+                    {
+                        $('#disconnected_network_description').hide();
+                    }
+                    else
+                    {
+                        $('#connected_network_description').hide();
+                    }
+                }
+                else
+                {
+                    $('#connected_section').hide();
+                }
+
+            });
+        </script>        
+
+        <title>Temperature Controller</title>
+    </head>
+
+    <body>
+        <header>
+            <div id="header_inner">
+                <a id="header_logo" href="home">Temperature Controller</a>
+            
+                <div id="navigation_bar">
+                    <nav>
+                        <ul id="nav_menu_main">
+                            <li><a id="home_item" class="selected_menu_item" href="home">Wi-Fi connection</a></li>
+                            <li><a id="diagnostics_item" href="diagnostics">Diagnostics</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <div id="page_content">
+        
+            <!-- Title bar -->
+            <div id="title_bar">
+                <h1>Wi-Fi connection</h1>
+            </div>
+
+            <form id="home_form" action="" method="post">
+            
+                <div id="connected_section" class="form_section">
+
+                    <p id="connected_network_description">The controller is connected to the following Wi-Fi network:</p>
+                    <p id="disconnected_network_description">The controller is configured to automatically connect to the following Wi-Fi network, but has not made a connection:</p>
+                    <p id="connected_network"><strong>{{ router_ssid }}</strong></p>
+
+                    <p>If you wish to disconnect from this Wi-Fi network then use the link below. You will then have the option to connect to another network.</p>
+                    <input class="button_as_link" type="submit" name="disconnect" value="Disconnect and forget network"/>
+                    
+                </div>
+                
+                <div id="not_connected_section" class="form_section">
+
+                    <p>Your controller needs access to the internet via a Wi-Fi network. If you know the SSID of your network (i.e. your router name) then you can connect directly.</p>
+                    <a class="link_as_button" href="connect?password_required=true">Connect with SSID</a>
+                    <p>Otherwise, you can scan for Wi-Fi networks in the vicinity and choose one to connect to.</p>
+                    <a class="link_as_button" href="scan">Scan for Wi-Fi networks</a>
+                </div>
+                
+            </form>
+            
+        </div>
+    </body>
+</html>

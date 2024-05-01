@@ -378,5 +378,21 @@ extern _TController _controller;
 extern void initialise_controller();
 extern void update_controller();
 extern uint32_t get_controller_crc();
+extern void reset_controller();
+extern bool read_controller_configuration(_TControllerConfiguration *configuration);
+extern bool read_controller_status(_TControllerStatus *status);
+extern bool read_firing_state(int32_t *firing_state);
+extern bool write_mac_address(char *mac_address);
+extern bool read_program(int32_t program_number, int32_t max_segments, _TProgram *program);
+extern bool write_program(int32_t program_number, int32_t max_segments, _TProgram *program);
+extern bool start_program(int32_t program_number, int32_t start_delay);
+extern bool stop_program();
+extern bool pause_program();
+extern bool resume_program();
+extern bool write_radio_led(bool on);
+extern bool read_event(int32_t event_id, _TEvent *event);
+extern bool clear_events();
+extern bool log_event(int32_t event_type, int32_t error_code);
+extern bool link_error();
 
 #endif // _CONTROLLER_H_

@@ -26,12 +26,14 @@ _TController _controller = {0};
 */
 void initialise_controller()
 {
+/*    
 	uint8_t *address;
 
 	// Convert the MAC address into string form
 	address = get_mac_address();
 	sprintf(_controller.mac_address, "%02X:%02X:%02X:%02X:%02X:%02X",
 			address[0], address[1], address[2], address[3], address[4], address[5]);
+*/
 }
 
 /**
@@ -39,6 +41,7 @@ void initialise_controller()
 */
 void update_controller()
 {
+/*    
     // Read configuration data from the controller if necessary
     if (!_controller.configuration_available)
     {
@@ -67,5 +70,13 @@ void update_controller()
 
     // If the configuration data has changed, re-read it from the controller on the next cycle
     if (_controller.status.configuration_changed) _controller.configuration_available = false;
+*/    
 }
 
+/**
+ * @brief Resets the PIC controller
+*/
+void reset_controller()
+{
+
+}
