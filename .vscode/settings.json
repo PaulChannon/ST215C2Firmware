@@ -1,0 +1,29 @@
+{
+  "C_Cpp.intelliSenseEngine": "default",
+  "idf.adapterTargetName": "esp32s3",
+  "idf.flashType": "UART",
+  "idf.portWin": "COM11",
+  "files.associations": {
+    "array": "c",
+    "string": "c",
+    "string_view": "c",
+    "bitset": "c",
+    "algorithm": "c",
+    "*.tcc": "c",
+    "ratio": "c",
+    "system_error": "c",
+    "functional": "c",
+    "regex": "c",
+    "tuple": "c",
+    "type_traits": "c",
+    "utility": "c",
+    "gpio.h": "c",
+    "bsp_local.h": "c",
+    "freertos.h": "c",
+    "freertosconfig.h": "c",
+    "common.h": "c",
+    "bsp_errors.h": "c",
+    "esp_wifi.h": "c"
+  },
+  "cmake.configureOnOpen": true
+}
